@@ -3,22 +3,23 @@ var app = express();
 var process = require('child_process');
 var bodyParser = require('body-parser');
 
-var https = require('https');
+var https = require('https'); 
 
+var SSLPORT = 8089;
+
+// 获取POST数据必要的操作
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
 var fs = require('fs');
-
+// 创建一个https服务器
 var httpsServer = https.createServer({
         key: fs.readFileSync('./2_w3c.shanon.cc.key','utf8'),
         cert: fs.readFileSync('./1_w3c.shanon.cc_bundle.crt','utf8'),
 
 },app);
 
-var PORT = 8089;
-var SSLPORT = 8089;
 
 httpsServer.listen(SSLPORT, function(){
         console.log('HTTPS Server is running on hppts://localhost:%s',SSLPORT);
@@ -92,7 +93,7 @@ if(typeof langsuf[lang] == 'undefined'){
 
 var filePath = '/root/soft/docker/';
 var file,filename;
-if(lang == 'java'){
+if(lang == 'java'){// java 特殊处理
     classname = classname.replace(/^\s+|\s+$/g,'');
     if(classname == ''){ 
         res.end('java param is error!!!');
@@ -113,7 +114,7 @@ exec_cmd = exec_cmd.replace(/#{path}/g,filePath);
 exec_cmd = exec_cmd.replace(/#{classname}/g,classname);
 exec_cmd = exec_cmd.replace(/#{filename}/g,filename);
 
-process.exec(exec_cmd, function (error, stdout, stderr) {
+process.exec(exec_cmd, function (error, stdout, stderr) { // 执行系统命令
         if (error !== null) {
           console.log('exec error: ' + error);
         }
@@ -125,7 +126,7 @@ process.exec(exec_cmd, function (error, stdout, stderr) {
 });
 
 
-
+// 写文件函数
 function writeFile(file, str){
 
     fs.writeFile(file, str, function(err){  
